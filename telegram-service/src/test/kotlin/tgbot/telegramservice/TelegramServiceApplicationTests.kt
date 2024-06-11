@@ -1,10 +1,10 @@
-package tg.telegrambot
+package tgbot.telegramservice
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class TelegramBotApplicationTests {
+class TelegramServiceApplicationTests {
 
 	@Test
 	fun contextLoads() {

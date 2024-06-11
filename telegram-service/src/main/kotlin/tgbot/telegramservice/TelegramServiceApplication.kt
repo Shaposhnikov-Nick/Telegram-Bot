@@ -1,11 +1,11 @@
-package tg.telegrambot
+package tgbot.telegramservice
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class TelegramBotApplication
+class TelegramServiceApplication
 
 fun main(args: Array<String>) {
-	runApplication<TelegramBotApplication>(*args)
+	runApplication<TelegramServiceApplication>(*args)
 }
