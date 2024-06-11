@@ -1,0 +1,47 @@
+plugins {
+	id 'org.springframework.boot' version "$springBootVersion"
+	id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
+	id 'org.jetbrains.kotlin.jvm' version "$kotlinVersion"
+	id 'org.jetbrains.kotlin.plugin.spring' version "$kotlinSpringPluginVersion"
+}
+
+group = 'tg-bot'
+version = "$applicationVersion"
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of("$jvmVersion")
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('springCloudVersion', "$springCloudVersion")
+}
+
+dependencies {
+	implementation 'org.jetbrains.kotlin:kotlin-reflect'
+	implementation 'org.springframework.cloud:spring-cloud-config-server'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+kotlin {
+	compilerOptions {
+		freeCompilerArgs.addAll '-Xjsr305=strict'
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
