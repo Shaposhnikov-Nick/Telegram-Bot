@@ -1,11 +1,21 @@
 server:
-  port: 9000
+  port: ${PORT}
 
 spring:
   application:
     name: config-server
-  profiles:
-    active: git
 
+  security:
+    user:
+      name: ${USERNAME}
+      password: ${PASSWORD}
 
-
+  cloud:
+    config:
+      server:
+        git:
+          uri: ${GIT_URI}
+          username: ${GIT_USERNAME}
+          password: ${GIT_TOKEN}
+          default-label: main
+          search-paths: "{application}"
