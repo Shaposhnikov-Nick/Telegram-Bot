@@ -1,0 +1,61 @@
+version: '3.8'
+services:
+
+  database:
+    image: postgres:14.1-alpine
+    container_name: tg-bot-db
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - ${DB_HOST_PORT}:${DB_CONTAINER_PORT}
+    volumes:
+      - tg-bot-db:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - tg-bot-network
+      
+  config-service:
+    build: ./config-server/
+    container_name: config-server
+    restart: always
+    environment:
+      - PORT=${CONFIG_SERVICE_CONTAINER_PORT}
+      - USERNAME=${CONFIG_SERVICE_USERNAME}
+      - PASSWORD=${CONFIG_SERVICE_PASSWORD}
+      - GIT_URI=${CONFIG_SERVICE_GIT_URI}
+      - GIT_USERNAME=${CONFIG_SERVICE_GIT_USERNAME}
+      - GIT_TOKEN=${CONFIG_SERVICE_GIT_TOKEN}
+    networks:
+      - tg-bot-network
+
+  telegram-service:
+    build: ./telegram-service/
+    container_name: telegram-service
+    restart: always
+    environment:
+      - USERNAME=${CONFIG_SERVICE_USERNAME}
+      - PASSWORD=${CONFIG_SERVICE_PASSWORD}
+      - CONFIG_SERVER_PORT=${CONFIG_SERVICE_CONTAINER_PORT}
+    depends_on:
+      database:
+        condition: service_healthy
+      config-service:
+        condition: service_started
+    ports:
+      - ${TELEGRAM_SERVICE_HOST_PORT}:${TELEGRAM_SERVICE_CONTAINER_PORT}
+    networks:
+      - tg-bot-network
+
+volumes:
+  tg-bot-db:
+  
+networks:
+  tg-bot-network:
