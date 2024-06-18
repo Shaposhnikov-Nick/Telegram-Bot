@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: translate-service
+#  profile:
+#    active: prod
+#    active: dev
