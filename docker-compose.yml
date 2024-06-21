@@ -1,6 +1,110 @@
 version: '3.8'
 services:
 
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: zookeeper
+    healthcheck:
+      test: [ "CMD", "nc", "-vz", "localhost", "2181" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    environment:
+      ZOOKEEPER_CLIENT_PORT: ${ZOOKEEPER_CONTAINER_PORT}
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - ${ZOOKEEPER_HOST_PORT}:${ZOOKEEPER_CONTAINER_PORT}
+    networks:
+      - tg-bot-network
+
+  kafka1:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka1
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "nc", "-vz", "localhost", "9092" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    ports:
+      - ${KAFKA_1_HOST_PORT}:${KAFKA_1_CONTAINER_PORT}
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:${ZOOKEEPER_CONTAINER_PORT}
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA_1_HOSTNAME}:9090,EXTERNAL://${KAFKA_1_HOSTNAME:-localhost}:${KAFKA_1_CONTAINER_PORT}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+    networks:
+      - tg-bot-network
+
+  kafka2:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka2
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "nc", "-vz", "localhost", "9093" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    ports:
+      - ${KAFKA_2_HOST_PORT}:${KAFKA_2_CONTAINER_PORT}
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:${ZOOKEEPER_CONTAINER_PORT}
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA_2_HOSTNAME}:9090,EXTERNAL://${KAFKA_2_HOSTNAME:-localhost}:${KAFKA_2_CONTAINER_PORT}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+    networks:
+      - tg-bot-network
+
+  kafka3:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka3
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "nc", "-vz", "localhost", "9094" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    ports:
+      - ${KAFKA_3_HOST_PORT}:${KAFKA_3_CONTAINER_PORT}
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:${ZOOKEEPER_CONTAINER_PORT}
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA_3_HOSTNAME}:9090,EXTERNAL://${KAFKA_3_HOSTNAME:-localhost}:${KAFKA_3_CONTAINER_PORT}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+    networks:
+      - tg-bot-network
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - ${KAFKA_UI_HOST_PORT}:${KAFKA_UI_CONTAINER_PORT}
+    restart: always
+    depends_on:
+      kafka1:
+        condition: service_healthy
+      kafka2:
+        condition: service_healthy
+      kafka3:
+        condition: service_healthy
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: ${KAFKA_1_HOSTNAME:-localhost}:${KAFKA_1_CONTAINER_PORT},${KAFKA_2_HOSTNAME:-localhost}:${KAFKA_2_CONTAINER_PORT},${KAFKA_3_HOSTNAME:-localhost}:${KAFKA_3_CONTAINER_PORT}
+    networks:
+      - tg-bot-network
+
   database:
     image: postgres:14.1-alpine
     container_name: tg-bot-db
@@ -49,8 +153,26 @@ services:
         condition: service_healthy
       config-service:
         condition: service_started
-    ports:
-      - ${TELEGRAM_SERVICE_HOST_PORT}:${TELEGRAM_SERVICE_CONTAINER_PORT}
+#    ports:
+#      - ${TELEGRAM_SERVICE_HOST_PORT}:${TELEGRAM_SERVICE_CONTAINER_PORT}
+    networks:
+      - tg-bot-network
+
+  translate-service:
+    build: ./translate-service/
+    container_name: translate-service
+    restart: always
+    environment:
+      - USERNAME=${CONFIG_SERVICE_USERNAME}
+      - PASSWORD=${CONFIG_SERVICE_PASSWORD}
+      - CONFIG_SERVER_PORT=${CONFIG_SERVICE_CONTAINER_PORT}
+    depends_on:
+      database:
+        condition: service_healthy
+      config-service:
+        condition: service_started
+#    ports:
+#      - ${TRANSLATE_SERVICE_HOST_PORT}:${TRANSLATE_SERVICE_CONTAINER_PORT}
     networks:
       - tg-bot-network
 
