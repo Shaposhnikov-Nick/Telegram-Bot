@@ -1,6 +1,7 @@
 server:
   port: ${PORT}
 
+spring:
   security:
     user:
       name: ${USERNAME}
