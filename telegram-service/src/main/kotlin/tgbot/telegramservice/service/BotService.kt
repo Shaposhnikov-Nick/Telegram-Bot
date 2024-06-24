@@ -22,7 +22,8 @@ val chatStarted: ConcurrentHashMap<String, Boolean> = ConcurrentHashMap(16, 75.0
 @Component
 class TelegramBot(
     private val botProperty: BotProperty,
-    private val messageHandler: MessageHandler
+    private val messageHandler: MessageHandler,
+    private val callbackHandler: CallbackHandler
 ) : TelegramLongPollingBot(botProperty.token) {
 
     val log = LoggerFactory.getLogger(this::class.java)
@@ -36,9 +37,8 @@ class TelegramBot(
                 execute(BotCommandHandler.handle(msg))
             else
                 execute(messageHandler.handle(msg))
-        }
-        if (update.hasCallbackQuery()) {
-            CallbackHandler.handle(update)
+        } else if (update.hasCallbackQuery()) {
+            execute(callbackHandler.handle(update))
         }
     }
 
