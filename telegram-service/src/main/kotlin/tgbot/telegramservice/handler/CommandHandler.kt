@@ -12,9 +12,6 @@ object BotCommandHandler {
         return when (msg.text) {
             MainCommand.START.value -> startCommandHandler(chatId)
             MainCommand.STOP.value -> stopCommandHandler(chatId)
-            MainCommand.TRANSLATE.value -> translateCommandHandler(chatId)
-            TranslateCommand.EN_RU.value -> translateEnRuCommandHandler(chatId)
-            TranslateCommand.RU_EN.value -> translateRuEnCommandHandler(chatId)
             else -> SendMessage(chatId, "Неизвестная команда!")
         }
     }
@@ -25,9 +22,9 @@ object BotCommandHandler {
         TRANSLATE("/translate")
     }
 
-    enum class TranslateCommand(val value: String) {
-        RU_EN("/ru|en"),
-        EN_RU("/en|ru")
+    enum class TranslateCommand(val value: String, val direction: String) {
+        RU_EN("/ru-en", "ru|en"),
+        EN_RU("/en-ru", "en|ru")
     }
 
 }
