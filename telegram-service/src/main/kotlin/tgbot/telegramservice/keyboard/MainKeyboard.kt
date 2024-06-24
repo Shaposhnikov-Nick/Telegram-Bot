@@ -9,20 +9,22 @@ val toMainMenuBtn = InlineKeyboardButtonWrapper("В главное меню", ca
 
 fun startMessageKeyboard(chatId: String): SendMessage {
     val message = SendMessage(chatId, "Узнать, что я могу")
-    val keyboard = InlineKeyboardMarkup()
-    val buttonRow1 = listOf(toMainMenuBtn)
-    keyboard.keyboard = listOf(buttonRow1)
+    val keyboard = InlineKeyboardMarkup().apply {
+        val buttonRow1 = listOf(toMainMenuBtn)
+        keyboard = listOf(buttonRow1)
+    }
     message.replyMarkup = keyboard
     return message
 }
 
 fun mainMenuKeyboard(chatId: String): SendMessage {
     val message = SendMessage(chatId, "Что бот умеет")
-    val keyboard = InlineKeyboardMarkup()
-    val translateBtn = InlineKeyboardButtonWrapper("Переводчик", callbackData = Callback.TRANSLATE.value)
-    val otherBtn = InlineKeyboardButtonWrapper("Что-то другое...", callbackData = "other")
-    val buttonRow1 = listOf(translateBtn, otherBtn)
-    keyboard.keyboard = listOf(buttonRow1)
+    val keyboard = InlineKeyboardMarkup().apply {
+        val translateBtn = InlineKeyboardButtonWrapper("Переводчик", callbackData = Callback.TRANSLATE.value)
+        val otherBtn = InlineKeyboardButtonWrapper("Что-то другое...", callbackData = "other")
+        val buttonRow1 = listOf(translateBtn, otherBtn)
+        keyboard = listOf(buttonRow1)
+    }
     message.replyMarkup = keyboard
     return message
 }
