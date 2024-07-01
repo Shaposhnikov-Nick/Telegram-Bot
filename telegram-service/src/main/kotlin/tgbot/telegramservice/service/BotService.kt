@@ -3,11 +3,13 @@ package tgbot.telegramservice.service
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import tgbot.telegramservice.config.BotProperty
 import tgbot.telegramservice.handler.BotCommandHandler
 import tgbot.telegramservice.handler.CallbackHandler
 import tgbot.telegramservice.handler.MessageHandler
+import tgbot.telegramservice.model.TranslateResponse
 import java.util.concurrent.ConcurrentHashMap
 
 
@@ -36,10 +38,15 @@ class TelegramBot(
             if (msg.isCommand)
                 execute(BotCommandHandler.handle(msg))
             else
-                execute(messageHandler.handle(msg))
+                messageHandler.handle(msg)?.let { execute(it) }
         } else if (update.hasCallbackQuery()) {
             execute(callbackHandler.handle(update))
         }
+    }
+
+    // TODO: fix for some responses
+    fun sendResponse(response: TranslateResponse) {
+        execute(SendMessage(response.chatId, response.response))
     }
 
 }

@@ -16,9 +16,9 @@ import tgbot.telegramservice.producer.Producer
 class MessageHandler(
     val producers: Map<String, Producer>
 ) {
-    fun handle(msg: Message): SendMessage {
+    fun handle(msg: Message): SendMessage? {
         val chatId = msg.chatId.toString()
-        if (!isChatStarted(chatId)) return chatNotStartedMsg(chatId)
+//        if (!isChatStarted(chatId)) return chatNotStartedMsg(chatId)
 
         val producer = when (getLastMainCommand(chatId)) {
             BotCommandHandler.MainCommand.TRANSLATE -> producers["translate"]!!
@@ -27,7 +27,7 @@ class MessageHandler(
             null -> TODO()
         }
         producer.send(TranslateRequestEvent(chatId, msg.text, getLastTranslateCommand(chatId)?.direction!!))
-        return translateResponseKeyboard(chatId, "Translated")
+        return null
     }
 
 }
