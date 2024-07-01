@@ -7,3 +7,13 @@ data class TranslateRequestEvent(
     val query: String,
     val langPair: String
 ): BotEvent
+
+data class TranslateResponseEvent(
+    val chatId: String,
+    val response: String
+)
+
+data class TranslateResponse(
+    val chatId: String,
+    val response: String
+)
