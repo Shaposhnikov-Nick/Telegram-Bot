@@ -1,6 +1,7 @@
 package tgbot.translateservice.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import tgbot.translateservice.producer.BotEvent
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class TranslateResponse(
@@ -27,3 +28,8 @@ data class TranslateRequestEvent(
     val query: String,
     val langPair: String
 )
+
+data class TranslateResponseEvent(
+    val chatId: String,
+    val response: String
+): BotEvent
