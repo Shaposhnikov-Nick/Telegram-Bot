@@ -1,21 +1,24 @@
 package tgbot.telegramservice.handler.util
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import tgbot.telegramservice.handler.BotCommandHandler
+import tgbot.telegramservice.handler.MainCommand
+import tgbot.telegramservice.handler.ServiceCommand
+import tgbot.telegramservice.handler.TranslateCommand
 import tgbot.telegramservice.keyboard.startMessageKeyboard
 import tgbot.telegramservice.service.chatStarted
 import tgbot.telegramservice.service.lastMainCommand
+import tgbot.telegramservice.service.lastServiceCommand
 import tgbot.telegramservice.service.lastTranslateCommand
 
 fun startCommandHandler(chatId: String): SendMessage {
     startChat(chatId)
-    addLastMainCommand(chatId, BotCommandHandler.MainCommand.START)
+    addLastMainCommand(chatId, MainCommand.START)
     return startMessageKeyboard(chatId)
 }
 
 fun stopCommandHandler(chatId: String): SendMessage {
     stopChat(chatId)
-    addLastMainCommand(chatId, BotCommandHandler.MainCommand.STOP)
+    addLastMainCommand(chatId, MainCommand.STOP)
     return SendMessage(chatId, "Goodbye")
 }
 
@@ -29,21 +32,27 @@ private fun stopChat(chatId: String) {
 
 fun isChatStarted(chatId: String): Boolean = chatStarted[chatId] ?: false
 
-fun isLastCommandTranslate(chatId: String): Boolean =
-    getLastMainCommand(chatId) == BotCommandHandler.MainCommand.TRANSLATE
+fun isLastServiceCommandTranslate(chatId: String): Boolean =
+    getLastServiceCommand(chatId) == ServiceCommand.TRANSLATE
 
 fun chatNotStartedMsg(chatId: String): SendMessage = SendMessage(chatId, "Запустите чат командой /start")
 
 fun translatorNotSelectedMsg(chatId: String): SendMessage = SendMessage(chatId, "Сначала выберите переводчик!")
 
-fun addLastMainCommand(chatId: String, lastComm: BotCommandHandler.MainCommand) {
+fun addLastMainCommand(chatId: String, lastComm: MainCommand) {
     lastMainCommand[chatId] = lastComm
 }
 
-fun getLastMainCommand(chatId: String): BotCommandHandler.MainCommand? = lastMainCommand[chatId]
+fun addLastServiceCommand(chatId: String, lastComm: ServiceCommand) {
+    lastServiceCommand[chatId] = lastComm
+}
 
-fun addLastTranslateCommand(chatId: String, lastComm: BotCommandHandler.TranslateCommand) {
+fun getLastMainCommand(chatId: String): MainCommand? = lastMainCommand[chatId]
+
+fun getLastServiceCommand(chatId: String): ServiceCommand? = lastServiceCommand[chatId]
+
+fun addLastTranslateCommand(chatId: String, lastComm: TranslateCommand) {
     lastTranslateCommand[chatId] = lastComm
 }
 
-fun getLastTranslateCommand(chatId: String): BotCommandHandler.TranslateCommand? = lastTranslateCommand[chatId]
+fun getLastTranslateCommand(chatId: String): TranslateCommand? = lastTranslateCommand[chatId]

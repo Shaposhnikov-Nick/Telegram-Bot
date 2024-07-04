@@ -1,11 +1,13 @@
 package tgbot.telegramservice.handler
 
+import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Message
 import tgbot.telegramservice.handler.util.*
 
 
-object BotCommandHandler {
+@Component
+class CommandHandler {
 
     fun handle(msg: Message): SendMessage {
         val chatId = msg.chatId.toString()
@@ -16,15 +18,18 @@ object BotCommandHandler {
         }
     }
 
-    enum class MainCommand(val value: String) {
-        START("/start"),
-        STOP("/stop"),
-        TRANSLATE("/translate")
-    }
+}
 
-    enum class TranslateCommand(val value: String, val direction: String) {
-        RU_EN("/ru-en", "ru|en"),
-        EN_RU("/en-ru", "en|ru")
-    }
+enum class MainCommand(val value: String) {
+    START("/start"),
+    STOP("/stop"),
+}
 
+enum class ServiceCommand(val value: String) {
+    TRANSLATE("/translate")
+}
+
+enum class TranslateCommand(val value: String, val direction: String) {
+    RU_EN("/ru-en", "ru|en"),
+    EN_RU("/en-ru", "en|ru")
 }
