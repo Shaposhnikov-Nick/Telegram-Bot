@@ -6,17 +6,17 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import tgbot.telegramservice.config.BotProperty
-import tgbot.telegramservice.handler.BotCommandHandler
-import tgbot.telegramservice.handler.CallbackHandler
-import tgbot.telegramservice.handler.MessageHandler
+import tgbot.telegramservice.handler.*
 import tgbot.telegramservice.model.TranslateResponse
 import java.util.concurrent.ConcurrentHashMap
 
 
 //TODO: change implementation to Redis
-val lastMainCommand: ConcurrentHashMap<String, BotCommandHandler.MainCommand> = ConcurrentHashMap(16, 75.0F, 15)
+val lastMainCommand: ConcurrentHashMap<String, MainCommand> = ConcurrentHashMap(16, 75.0F, 15)
 
-val lastTranslateCommand: ConcurrentHashMap<String, BotCommandHandler.TranslateCommand> =
+val lastServiceCommand: ConcurrentHashMap<String, ServiceCommand> = ConcurrentHashMap(16, 75.0F, 15)
+
+val lastTranslateCommand: ConcurrentHashMap<String, TranslateCommand> =
     ConcurrentHashMap(16, 75.0F, 15)
 
 val chatStarted: ConcurrentHashMap<String, Boolean> = ConcurrentHashMap(16, 75.0F, 15)
@@ -25,7 +25,8 @@ val chatStarted: ConcurrentHashMap<String, Boolean> = ConcurrentHashMap(16, 75.0
 class TelegramBot(
     private val botProperty: BotProperty,
     private val messageHandler: MessageHandler,
-    private val callbackHandler: CallbackHandler
+    private val callbackHandler: CallbackHandler,
+    private val commandHandler: CommandHandler
 ) : TelegramLongPollingBot(botProperty.token) {
 
     val log = LoggerFactory.getLogger(this::class.java)
@@ -33,14 +34,16 @@ class TelegramBot(
 
     override fun onUpdateReceived(update: Update) {
         log.info("New Message ${update.message}")
-        if (update.hasMessage()) {
-            val msg = update.message
-            if (msg.isCommand)
-                execute(BotCommandHandler.handle(msg))
-            else
-                messageHandler.handle(msg)?.let { execute(it) }
-        } else if (update.hasCallbackQuery()) {
-            execute(callbackHandler.handle(update))
+        when {
+            update.hasMessage() -> {
+                val msg = update.message
+                if (msg.isCommand)
+                    execute(commandHandler.handle(msg))
+                else
+                    messageHandler.handle(msg)?.let { execute(it) }
+            }
+
+            update.hasCallbackQuery() -> execute(callbackHandler.handle(update))
         }
     }
 
