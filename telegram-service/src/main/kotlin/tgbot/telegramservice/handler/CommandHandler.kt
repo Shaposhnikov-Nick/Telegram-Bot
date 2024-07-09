@@ -3,18 +3,20 @@ package tgbot.telegramservice.handler
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Message
+import tgbot.telegramservice.entity.User
 import tgbot.telegramservice.handler.util.*
 
 
 @Component
-class CommandHandler {
+class CommandHandler(
+    val commandUtil: CommandHandlerUtil
+) {
 
-    fun handle(msg: Message): SendMessage {
-        val chatId = msg.chatId.toString()
+    fun handle(msg: Message, user: User): SendMessage {
         return when (msg.text) {
-            MainCommand.START.value -> startCommandHandler(chatId)
-            MainCommand.STOP.value -> stopCommandHandler(chatId)
-            else -> SendMessage(chatId, "Неизвестная команда!")
+            MainCommand.START.value -> commandUtil.startCommandHandler(user)
+            MainCommand.STOP.value -> commandUtil.stopCommandHandler(user)
+            else -> SendMessage(user.id, "Неизвестная команда!")
         }
     }
 
