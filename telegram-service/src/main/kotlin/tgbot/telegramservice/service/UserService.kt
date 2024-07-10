@@ -7,7 +7,7 @@ import tgbot.telegramservice.repository.UserRepository
 interface UserService {
     fun saveUser(user: User): User
     fun getAllUsers(): List<User>
-    fun getUserById(id: String): User?
+    fun getUserByChatId(chatId: String): User?
     fun deleteUser(id: String)
 }
 
@@ -24,8 +24,8 @@ class UserServiceImpl(
         return userRepository.findAll().toList()
     }
 
-    override fun getUserById(id: String): User? {
-        return userRepository.findById(id).orElse(null)
+    override fun getUserByChatId(chatId: String): User? {
+        return userRepository.findUserByChatId(chatId)
     }
 
     override fun deleteUser(id: String) {
