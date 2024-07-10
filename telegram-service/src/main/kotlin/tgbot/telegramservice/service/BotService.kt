@@ -6,27 +6,18 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import tgbot.telegramservice.config.BotProperty
+import tgbot.telegramservice.entity.User
 import tgbot.telegramservice.handler.*
 import tgbot.telegramservice.model.TranslateResponse
-import java.util.concurrent.ConcurrentHashMap
 
-
-//TODO: change implementation to Redis
-val lastMainCommand: ConcurrentHashMap<String, MainCommand> = ConcurrentHashMap(16, 75.0F, 15)
-
-val lastServiceCommand: ConcurrentHashMap<String, ServiceCommand> = ConcurrentHashMap(16, 75.0F, 15)
-
-val lastTranslateCommand: ConcurrentHashMap<String, TranslateCommand> =
-    ConcurrentHashMap(16, 75.0F, 15)
-
-val chatStarted: ConcurrentHashMap<String, Boolean> = ConcurrentHashMap(16, 75.0F, 15)
 
 @Component
 class TelegramBot(
     private val botProperty: BotProperty,
     private val messageHandler: MessageHandler,
     private val callbackHandler: CallbackHandler,
-    private val commandHandler: CommandHandler
+    private val commandHandler: CommandHandler,
+    private val userService: UserService
 ) : TelegramLongPollingBot(botProperty.token) {
 
     val log = LoggerFactory.getLogger(this::class.java)
@@ -34,16 +25,17 @@ class TelegramBot(
 
     override fun onUpdateReceived(update: Update) {
         log.info("New Message ${update.message}")
+        val user = getOrCreateUser(update)
         when {
             update.hasMessage() -> {
                 val msg = update.message
                 if (msg.isCommand)
-                    execute(commandHandler.handle(msg))
+                    execute(commandHandler.handle(msg, user))
                 else
-                    messageHandler.handle(msg)?.let { execute(it) }
+                    messageHandler.handle(msg, user)?.let { execute(it) }
             }
 
-            update.hasCallbackQuery() -> execute(callbackHandler.handle(update))
+            update.hasCallbackQuery() -> execute(callbackHandler.handle(update, user))
         }
     }
 
@@ -52,5 +44,9 @@ class TelegramBot(
         execute(SendMessage(response.chatId, response.response))
     }
 
-}
+    private fun getOrCreateUser(update: Update): User {
+        val chatId = update.message?.chatId?.toString() ?: update.callbackQuery.message.chatId.toString()
+        return userService.getUserByChatId(chatId) ?: userService.saveUser(User(chatId))
+    }
 
+}
