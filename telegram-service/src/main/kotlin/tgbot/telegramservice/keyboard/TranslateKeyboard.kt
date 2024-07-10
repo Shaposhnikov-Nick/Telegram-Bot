@@ -2,10 +2,11 @@ package tgbot.telegramservice.keyboard
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
+import tgbot.telegramservice.entity.User
 
 
-fun translateKeyboard(chatId: String): SendMessage {
-    val message = SendMessage(chatId, "С какого языка на какой перевести")
+fun translateKeyboard(user: User): SendMessage {
+    val message = SendMessage(user.chatId, "С какого языка на какой перевести")
     val keyboard = InlineKeyboardMarkup().apply {
         val buttonRow1 = listOf(ruToEnBtn, enToRuBtn)
         val buttonRow2 = listOf(toMainMenuBtn)
