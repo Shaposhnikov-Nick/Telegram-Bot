@@ -1,5 +1,6 @@
 package tgbot.telegramservice.entity
 
+import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
 import tgbot.telegramservice.handler.MainCommand
 import tgbot.telegramservice.handler.ServiceCommand
@@ -8,7 +9,8 @@ import java.io.Serializable
 
 @RedisHash("user")
 data class User(
-    val id: String  // equals chatId
+    @Id
+    val chatId: String
 ) : Serializable {
     var chatStarted: Boolean = false
     var lastMainCommand: MainCommand = MainCommand.STOP
