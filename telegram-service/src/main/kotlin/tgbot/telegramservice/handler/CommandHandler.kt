@@ -16,7 +16,7 @@ class CommandHandler(
         return when (msg.text) {
             MainCommand.START.value -> commandUtil.startCommandHandler(user)
             MainCommand.STOP.value -> commandUtil.stopCommandHandler(user)
-            else -> SendMessage(user.id, "Неизвестная команда!")
+            else -> SendMessage(user.chatId, "Неизвестная команда!")
         }
     }
 

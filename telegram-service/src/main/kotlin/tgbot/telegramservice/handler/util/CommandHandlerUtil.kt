@@ -18,13 +18,13 @@ class CommandHandlerUtil(
     fun startCommandHandler(user: User): SendMessage {
         startChat(user)
         addLastMainCommand(user, MainCommand.START)
-        return startMessageKeyboard(user.id)
+        return startMessageKeyboard(user)
     }
 
     fun stopCommandHandler(user: User): SendMessage {
         stopChat(user)
         addLastMainCommand(user, MainCommand.STOP)
-        return SendMessage(user.id, "Goodbye")
+        return SendMessage(user.chatId, "Goodbye")
     }
 
     private fun startChat(user: User) {
@@ -37,29 +37,30 @@ class CommandHandlerUtil(
         userService.saveUser(user)
     }
 
-    fun isChatStarted(chatId: String): Boolean = chatStarted[chatId] ?: false
+    fun isChatStarted(user: User): Boolean = user.chatStarted
 
-    fun isLastServiceCommandTranslate(chatId: String): Boolean =
-        getLastServiceCommand(chatId) == ServiceCommand.TRANSLATE
+    fun isLastServiceCommandTranslate(user: User): Boolean = user.lastServiceCommand == ServiceCommand.TRANSLATE
 
-    fun chatNotStartedMsg(chatId: String): SendMessage = SendMessage(chatId, "Запустите чат командой /start")
+    fun chatNotStartedMsg(user: User): SendMessage = SendMessage(user.chatId, "Запустите чат командой /start")
 
-    fun translatorNotSelectedMsg(chatId: String): SendMessage = SendMessage(chatId, "Сначала выберите переводчик!")
+    fun translatorNotSelectedMsg(user: User): SendMessage = SendMessage(user.chatId, "Сначала выберите переводчик!")
 
     fun addLastMainCommand(user: User, lastComm: MainCommand) {
         user.lastMainCommand = lastComm
         userService.saveUser(user)
     }
 
-    fun addLastServiceCommand(chatId: String, lastComm: ServiceCommand) {
-        lastServiceCommand[chatId] = lastComm
+    fun addLastServiceCommand(user: User, lastComm: ServiceCommand) {
+        user.lastServiceCommand = lastComm
+        userService.saveUser(user)
     }
 
-    fun getLastServiceCommand(chatId: String): ServiceCommand? = lastServiceCommand[chatId]
+    fun getLastServiceCommand(user: User): ServiceCommand? = user.lastServiceCommand
 
-    fun addLastTranslateCommand(chatId: String, lastComm: TranslateCommand) {
-        lastTranslateCommand[chatId] = lastComm
+    fun addLastTranslateCommand(user: User, lastComm: TranslateCommand) {
+        user.lastTranslateCommand = lastComm
+        userService.saveUser(user)
     }
 
-    fun getLastTranslateCommand(chatId: String): TranslateCommand? = lastTranslateCommand[chatId]
+    fun getLastTranslateCommand(user: User): TranslateCommand? = user.lastTranslateCommand
 }

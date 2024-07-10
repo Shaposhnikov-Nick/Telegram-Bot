@@ -3,20 +3,22 @@ package tgbot.telegramservice.handler
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
+import tgbot.telegramservice.entity.User
 import tgbot.telegramservice.handler.util.*
-import tgbot.telegramservice.keyboard.mainMenuKeyboard
 
 
 @Component
-class CallbackHandler {
+class CallbackHandler(
+    val callbackUtil: CallbackHandlerUtil
+) {
 
-    fun handle(update: Update): SendMessage {
+    fun handle(update: Update, user: User): SendMessage {
         val chatId = update.callbackQuery.message.chatId.toString()
         val response = when (update.callbackQuery.data) {
-            Callback.MAIN_MENU.value -> mainMenuCallbackHandler(chatId)
-            Callback.TRANSLATE.value -> translateCallbackHandler(chatId)
-            Callback.EN_RU.value -> enRuTranslateCallbackHandler(chatId)
-            Callback.RU_EN.value -> ruEnTranslateCallbackHandler(chatId)
+            Callback.MAIN_MENU.value -> callbackUtil.mainMenuCallbackHandler(user)
+            Callback.TRANSLATE.value -> callbackUtil.translateCallbackHandler(user)
+            Callback.EN_RU.value -> callbackUtil.enRuTranslateCallbackHandler(user)
+            Callback.RU_EN.value -> callbackUtil.ruEnTranslateCallbackHandler(user)
             else -> SendMessage(chatId, "Неизвестная команда!")
         }
         return response

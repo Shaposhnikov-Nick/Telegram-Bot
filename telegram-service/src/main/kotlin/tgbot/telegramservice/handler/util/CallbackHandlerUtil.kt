@@ -1,41 +1,48 @@
 package tgbot.telegramservice.handler.util
 
+import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import tgbot.telegramservice.entity.User
 import tgbot.telegramservice.handler.ServiceCommand
 import tgbot.telegramservice.handler.TranslateCommand
 import tgbot.telegramservice.keyboard.mainMenuKeyboard
 import tgbot.telegramservice.keyboard.translateKeyboard
 
 
-fun mainMenuCallbackHandler(chatId: String): SendMessage {
-    return mainMenuKeyboard(chatId)
-}
-
-fun translateCallbackHandler(chatId: String): SendMessage {
-    return if (isChatStarted(chatId)) {
-        addLastServiceCommand(chatId, ServiceCommand.TRANSLATE)
-        translateKeyboard(chatId)
-    } else chatNotStartedMsg(chatId)
-}
-
-fun enRuTranslateCallbackHandler(chatId: String): SendMessage {
-    return if (!isChatStarted(chatId)) {
-        chatNotStartedMsg(chatId)
-    } else if (!isLastServiceCommandTranslate(chatId)) {
-        translatorNotSelectedMsg(chatId)
-    } else {
-        addLastTranslateCommand(chatId, TranslateCommand.EN_RU)
-        SendMessage(chatId, "Введите слово или фразу на английском")
+@Component
+class CallbackHandlerUtil(
+    val commandUtil: CommandHandlerUtil
+) {
+    fun mainMenuCallbackHandler(user: User): SendMessage {
+        return mainMenuKeyboard(user)
     }
-}
 
-fun ruEnTranslateCallbackHandler(chatId: String): SendMessage {
-    return if (!isChatStarted(chatId)) {
-        chatNotStartedMsg(chatId)
-    } else if (!isLastServiceCommandTranslate(chatId)) {
-        translatorNotSelectedMsg(chatId)
-    } else {
-        addLastTranslateCommand(chatId, TranslateCommand.RU_EN)
-        SendMessage(chatId, "Введите слово или фразу по русски")
+    fun translateCallbackHandler(user: User): SendMessage {
+        return if (commandUtil.isChatStarted(user)) {
+            commandUtil.addLastServiceCommand(user, ServiceCommand.TRANSLATE)
+            translateKeyboard(user)
+        } else commandUtil.chatNotStartedMsg(user)
+    }
+
+    fun enRuTranslateCallbackHandler(user: User): SendMessage {
+        return if (!commandUtil.isChatStarted(user)) {
+            commandUtil.chatNotStartedMsg(user)
+        } else if (!commandUtil.isLastServiceCommandTranslate(user)) {
+            commandUtil.translatorNotSelectedMsg(user)
+        } else {
+            commandUtil.addLastTranslateCommand(user, TranslateCommand.EN_RU)
+            SendMessage(user.chatId, "Введите слово или фразу на английском")
+        }
+    }
+
+    fun ruEnTranslateCallbackHandler(user: User): SendMessage {
+        return if (!commandUtil.isChatStarted(user)) {
+            commandUtil.chatNotStartedMsg(user)
+        } else if (!commandUtil.isLastServiceCommandTranslate(user)) {
+            commandUtil.translatorNotSelectedMsg(user)
+        } else {
+            commandUtil.addLastTranslateCommand(user, TranslateCommand.RU_EN)
+            SendMessage(user.chatId, "Введите слово или фразу по русски")
+        }
     }
 }
