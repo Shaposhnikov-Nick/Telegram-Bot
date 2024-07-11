@@ -10,9 +10,9 @@ import tgbot.telegramservice.handler.util.*
 @Component
 class CallbackHandler(
     val callbackUtil: CallbackHandlerUtil
-) {
+) : Handler {
 
-    fun handle(update: Update, user: User): SendMessage {
+    override fun handle(update: Update, user: User): SendMessage {
         val chatId = update.callbackQuery.message.chatId.toString()
         val response = when (update.callbackQuery.data) {
             Callback.MAIN_MENU.value -> callbackUtil.mainMenuCallbackHandler(user)

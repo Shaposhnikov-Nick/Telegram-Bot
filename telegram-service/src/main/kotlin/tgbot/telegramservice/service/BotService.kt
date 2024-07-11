@@ -14,9 +14,7 @@ import tgbot.telegramservice.model.TranslateResponse
 @Component
 class TelegramBot(
     private val botProperty: BotProperty,
-    private val messageHandler: MessageHandler,
-    private val callbackHandler: CallbackHandler,
-    private val commandHandler: CommandHandler,
+    private val handlers: Map<String, Handler>,
     private val userService: UserService
 ) : TelegramLongPollingBot(botProperty.token) {
 
@@ -30,12 +28,12 @@ class TelegramBot(
             update.hasMessage() -> {
                 val msg = update.message
                 if (msg.isCommand)
-                    execute(commandHandler.handle(msg, user))
+                    execute(handlers["commandHandler"]?.handle(update, user))
                 else
-                    messageHandler.handle(msg, user)?.let { execute(it) }
+                    handlers["messageHandler"]?.handle(update, user)?.let { execute(it) }
             }
 
-            update.hasCallbackQuery() -> execute(callbackHandler.handle(update, user))
+            update.hasCallbackQuery() -> execute(handlers["callbackHandler"]?.handle(update, user))
         }
     }
 

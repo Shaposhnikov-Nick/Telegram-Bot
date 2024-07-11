@@ -2,7 +2,7 @@ package tgbot.telegramservice.handler
 
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import org.telegram.telegrambots.meta.api.objects.Message
+import org.telegram.telegrambots.meta.api.objects.Update
 import tgbot.telegramservice.entity.User
 import tgbot.telegramservice.handler.util.*
 
@@ -10,10 +10,10 @@ import tgbot.telegramservice.handler.util.*
 @Component
 class CommandHandler(
     val commandUtil: CommandHandlerUtil
-) {
+) : Handler {
 
-    fun handle(msg: Message, user: User): SendMessage {
-        return when (msg.text) {
+    override fun handle(update: Update, user: User): SendMessage {
+        return when (update.message.text) {
             MainCommand.START.value -> commandUtil.startCommandHandler(user)
             MainCommand.STOP.value -> commandUtil.stopCommandHandler(user)
             else -> SendMessage(user.chatId, "Неизвестная команда!")
