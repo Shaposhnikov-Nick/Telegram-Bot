@@ -1,7 +1,7 @@
 plugins {
 	id 'org.springframework.boot' version "$springBootVersion"
 	id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
-	id 'org.jetbrains.kotlin.jvm' version"$kotlinVersion"
+	id 'org.jetbrains.kotlin.jvm' version "$kotlinVersion"
 	id 'org.jetbrains.kotlin.plugin.spring' version "$kotlinVersion"
 }
 
@@ -34,7 +34,6 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
-	implementation group: 'org.telegram', name: 'telegrambots-spring-boot-starter', version: "$telegramBotsStarterVersion"
 	testImplementation 'io.projectreactor:reactor-test'
 	testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
