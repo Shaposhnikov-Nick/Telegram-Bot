@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: weather-service
+  profiles:
+        active: prod
+#    active: dev
