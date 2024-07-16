@@ -16,33 +16,26 @@ class BotProperty {
 class KafkaProperties {
     lateinit var bootstrapServers: String
     lateinit var topics: Topics
-    lateinit var consumers: Consumers
-    lateinit var producers: Producers
+    lateinit var consumers: Map<String, Consumer>
+    lateinit var producers: Map<String, Producer>
 
     class Topics {
         lateinit var translateRequest: String
         lateinit var translateResponse: String
+        lateinit var weatherRequest: String
+        lateinit var weatherResponse: String
     }
 
-    class Consumers {
-        lateinit var translateConsumer: Consumer
-
-        class Consumer {
-            lateinit var groupId: String
-            lateinit var autoOffsetReset: String
-            lateinit var keyDeserializer: String
-            lateinit var valueDeserializer: String
-            lateinit var valueDefaultType: String
-        }
+    class Consumer {
+        lateinit var groupId: String
+        lateinit var autoOffsetReset: String
+        lateinit var keyDeserializer: String
+        lateinit var valueDeserializer: String
+        lateinit var valueDefaultType: String
     }
 
-    class Producers {
-        lateinit var translateProducer: Producer
-
-        class Producer {
-            lateinit var keySerializer: String
-            lateinit var valueSerializer: String
-        }
+    class Producer {
+        lateinit var keySerializer: String
+        lateinit var valueSerializer: String
     }
-
 }
