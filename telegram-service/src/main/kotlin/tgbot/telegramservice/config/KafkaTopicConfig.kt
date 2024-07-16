@@ -29,4 +29,22 @@ class KafkaTopicConfig(
             .build()
     }
 
+    @Bean
+    fun weatherRequestTopic(): NewTopic {
+        return TopicBuilder
+            .name(kafkaProperties.topics.weatherRequest)
+            .partitions(3)
+            .replicas(3)
+            .build()
+    }
+
+    @Bean
+    fun weatherResponseTopic(): NewTopic {
+        return TopicBuilder
+            .name(kafkaProperties.topics.weatherResponse)
+            .partitions(3)
+            .replicas(3)
+            .build()
+    }
+
 }
