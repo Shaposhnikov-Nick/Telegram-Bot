@@ -19,6 +19,7 @@ class CallbackHandler(
             Callback.TRANSLATE.value -> callbackUtil.translateCallbackHandler(user)
             Callback.EN_RU.value -> callbackUtil.enRuTranslateCallbackHandler(user)
             Callback.RU_EN.value -> callbackUtil.ruEnTranslateCallbackHandler(user)
+            Callback.WEATHER_FORECAST.value -> callbackUtil.weatherForecastCallbackHandler(user)
             else -> SendMessage(chatId, "Неизвестная команда!")
         }
         return response
@@ -29,5 +30,6 @@ enum class Callback(val value: String) {
     MAIN_MENU("mainMenu"),
     TRANSLATE("translate"),
     RU_EN("ru|en"),
-    EN_RU("en|ru")
+    EN_RU("en|ru"),
+    WEATHER_FORECAST("weather")
 }

@@ -7,6 +7,7 @@ import tgbot.telegramservice.entity.User
 import tgbot.telegramservice.handler.util.*
 import tgbot.telegramservice.keyboard.mainMenuKeyboard
 import tgbot.telegramservice.model.TranslateRequestEvent
+import tgbot.telegramservice.model.WeatherRequestEvent
 import tgbot.telegramservice.producer.Producer
 
 
@@ -18,17 +19,24 @@ class MessageHandler(
     override fun handle(update: Update, user: User): SendMessage? {
         if (!commandUtil.isChatStarted(user)) return commandUtil.chatNotStartedMsg(user)
 
-        val producer = when (commandUtil.getLastServiceCommand(user)) {
-            ServiceCommand.TRANSLATE -> producers["translate"]!!
+        val complexProducer = when (commandUtil.getLastServiceCommand(user)) {
+            ServiceCommand.TRANSLATE -> {
+                producers["translate"]!! to TranslateRequestEvent(
+                    user.chatId, update.message.text, commandUtil.getLastTranslateCommand(user)?.direction!!
+                )
+            }
+
+            ServiceCommand.WEATHER_FORECAST -> {
+                producers["weather"]!! to WeatherRequestEvent(
+                    user.chatId, update.message.text
+                )
+            }
+
             else -> null
         }
 
-        return if (producer != null) {
-            producer.send(
-                TranslateRequestEvent(
-                    user.chatId, update.message.text, commandUtil.getLastTranslateCommand(user)?.direction!!
-                )
-            )
+        return if (complexProducer != null) {
+            complexProducer.first.send(complexProducer.second)
         } else mainMenuKeyboard(user)
 
     }

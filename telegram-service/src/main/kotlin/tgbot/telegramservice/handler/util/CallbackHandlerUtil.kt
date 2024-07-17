@@ -45,4 +45,14 @@ class CallbackHandlerUtil(
             SendMessage(user.chatId, "Введите слово или фразу по русски")
         }
     }
+
+    fun weatherForecastCallbackHandler(user: User): SendMessage {
+        return if (!commandUtil.isChatStarted(user)) {
+            commandUtil.chatNotStartedMsg(user)
+        } else {
+            commandUtil.addLastServiceCommand(user, ServiceCommand.WEATHER_FORECAST)
+            SendMessage(user.chatId, "Введите название населенного пункта")
+        }
+    }
+
 }

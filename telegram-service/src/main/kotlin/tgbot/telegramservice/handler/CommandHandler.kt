@@ -28,7 +28,8 @@ enum class MainCommand(val value: String) {
 }
 
 enum class ServiceCommand(val value: String) {
-    TRANSLATE("/translate")
+    TRANSLATE("/translate"),
+    WEATHER_FORECAST("/weather_forecast")
 }
 
 enum class TranslateCommand(val value: String, val direction: String) {
