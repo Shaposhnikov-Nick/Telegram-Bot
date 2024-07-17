@@ -18,8 +18,9 @@ fun startMessageKeyboard(user: User): SendMessage {
 fun mainMenuKeyboard(user: User): SendMessage {
     val message = SendMessage(user.chatId, "Что бот умеет")
     val keyboard = InlineKeyboardMarkup().apply {
-        val buttonRow1 = listOf(translateBtn, otherBtn)
-        keyboard = listOf(buttonRow1)
+        val buttonRow1 = listOf(translateBtn, weatherBtn)
+        val buttonRow2 = listOf(otherBtn)
+        keyboard = listOf(buttonRow1, buttonRow2)
     }
     message.replyMarkup = keyboard
     return message

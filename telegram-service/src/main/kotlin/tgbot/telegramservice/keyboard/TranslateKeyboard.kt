@@ -16,6 +16,7 @@ fun translateKeyboard(user: User): SendMessage {
     return message
 }
 
+// TODO: need?
 fun translateResponseKeyboard(chatId: String, response: String): SendMessage {
     val message = SendMessage(chatId, response)
     val keyboard = InlineKeyboardMarkup().apply {
