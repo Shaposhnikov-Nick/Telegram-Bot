@@ -11,9 +11,9 @@ data class TranslateRequestEvent(
 data class TranslateResponseEvent(
     val chatId: String,
     val response: String
-)
 
-data class TranslateResponse(
-    val chatId: String,
-    val response: String
-)
+): Event {
+    override fun toString(): String {
+        return response
+    }
+}
