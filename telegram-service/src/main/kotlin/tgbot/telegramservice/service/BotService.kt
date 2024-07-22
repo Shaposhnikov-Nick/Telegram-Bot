@@ -8,7 +8,8 @@ import org.telegram.telegrambots.meta.api.objects.Update
 import tgbot.telegramservice.config.BotProperty
 import tgbot.telegramservice.entity.User
 import tgbot.telegramservice.handler.*
-import tgbot.telegramservice.model.TranslateResponse
+import tgbot.telegramservice.model.ServiceResponse
+import tgbot.telegramservice.model.Event
 
 
 @Component
@@ -37,9 +38,8 @@ class TelegramBot(
         }
     }
 
-    // TODO: fix for some responses
-    fun sendResponse(response: TranslateResponse) {
-        execute(SendMessage(response.chatId, response.response))
+    fun sendResponse(response: ServiceResponse<Event>) {
+        execute(SendMessage(response.chatId, response.body.toString()))
     }
 
     private fun getOrCreateUser(update: Update): User {
