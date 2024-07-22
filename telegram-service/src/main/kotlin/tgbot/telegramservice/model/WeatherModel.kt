@@ -12,9 +12,15 @@ data class WeatherRequestEvent(
 data class WeatherResponseEvent(
     val chatId: String,
     val name: String,
-    val description: String,
+    val visibility: Int,
     val humidity: Double,
-    val wind: Double,
+    val wind: Double?,
+    val windGust: Double?,
     val temp: Double,
-    val feelLike: Double
-)
+    val feelLike: Double,
+    val clouds: Int?,
+    val rainOneHour: Double?,
+    val rainThreeHours: Double?,
+    val snowOneHour: Double?,
+    val snowThreeHours: Double?
+) : Event
