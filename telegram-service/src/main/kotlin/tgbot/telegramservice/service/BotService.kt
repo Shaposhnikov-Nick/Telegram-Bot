@@ -39,7 +39,14 @@ class TelegramBot(
     }
 
     fun sendResponse(response: ServiceResponse<Event>) {
-        execute(SendMessage(response.chatId, response.body.toString()))
+        val sm = SendMessage.builder()
+            .chatId(response.chatId)
+            .text(response.body.toString())
+            .disableWebPagePreview(false)
+            .parseMode("html")
+            .build()
+
+        execute(sm)
     }
 
     private fun getOrCreateUser(update: Update): User {
