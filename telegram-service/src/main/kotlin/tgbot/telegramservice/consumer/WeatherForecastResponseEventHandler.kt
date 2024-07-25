@@ -12,7 +12,7 @@ class WeatherForecastResponseEventHandler(
 ) {
 
     @KafkaListener(
-        topics = ["weather-response-event-topic"],
+        topics = ["#{kafkaProperties.topics.weatherResponse}"],
         containerFactory = "weatherResponseListenerContainerFactory"
     )
     fun handler(weatherResponse: WeatherResponseEvent) {

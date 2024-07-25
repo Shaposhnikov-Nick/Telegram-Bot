@@ -13,7 +13,7 @@ class TranslateResponseEventHandler(
 ) {
 
     @KafkaListener(
-        topics = ["translate-response-event-topic"],
+        topics = ["#{kafkaProperties.topics.translateResponse}"],
         containerFactory = "translateResponseListenerContainerFactory"
     )
     fun handler(translateResponse: TranslateResponseEvent) {
