@@ -13,6 +13,8 @@ data class WeatherRequestEvent(
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class WeatherResponse(
     val name: String,
+    @JsonProperty("weather")
+    val descrWeather: List<WeatherDescription>,
     @JsonProperty("main")
     val mainWeather: MainWeather,
     val visibility: Int,
@@ -20,6 +22,11 @@ data class WeatherResponse(
     val clouds: Clouds?,
     val rain: Rain?,
     val snow: Snow?
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class WeatherDescription(
+    val description: String
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -55,6 +62,7 @@ data class Snow(
 data class WeatherResponseEvent(
     val chatId: String,
     val name: String,
+    val description: String,
     val visibility: Int,
     val humidity: Double,
     val wind: Double?,

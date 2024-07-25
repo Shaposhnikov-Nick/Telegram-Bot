@@ -27,6 +27,7 @@ class WeatherForecastRequestEventHandler(
         val weatherResponse = WeatherResponseEvent(
             weatherRequest.chatId,
             result.name,
+            result.descrWeather[0].description,
             result.visibility,
             result.mainWeather.humidity,
             result.wind?.speed,
