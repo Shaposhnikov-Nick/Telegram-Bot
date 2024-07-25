@@ -17,7 +17,7 @@ class TranslateRequestEventHandler(
     val log = LoggerFactory.getLogger(this::class.java)
 
     @KafkaListener(
-        topics = ["translate-request-event-topic"],
+        topics = ["#{kafkaProperties.topics.translateRequest}"],
         containerFactory = "translateRequestListenerContainerFactory"
     )
     suspend fun handler(translateRequest: TranslateRequestEvent) {
