@@ -5,4 +5,6 @@ class ServiceResponse<T: Event> (
     val body: T
 )
 
-interface Event
+interface Event {
+    fun getMessageBody(): String
+}

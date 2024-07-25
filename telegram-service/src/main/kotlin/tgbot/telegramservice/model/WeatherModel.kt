@@ -26,7 +26,7 @@ data class WeatherResponseEvent(
     val snowOneHour: Double?,
     val snowThreeHours: Double?
 ) : Event {
-    override fun toString(): String {
+    override fun getMessageBody(): String {
         val weatherAsString = """
         ${"Населенный пункт:".bold()} ${name.bold()}
         Описание: $description

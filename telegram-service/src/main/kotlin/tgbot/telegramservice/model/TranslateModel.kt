@@ -13,7 +13,7 @@ data class TranslateResponseEvent(
     val response: String
 
 ): Event {
-    override fun toString(): String {
+    override fun getMessageBody(): String {
         return response
     }
 }

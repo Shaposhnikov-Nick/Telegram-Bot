@@ -41,7 +41,7 @@ class TelegramBot(
     fun sendResponse(response: ServiceResponse<Event>) {
         val sm = SendMessage.builder()
             .chatId(response.chatId)
-            .text(response.body.toString())
+            .text(response.body.getMessageBody())
             .disableWebPagePreview(false)
             .parseMode("html")
             .build()
