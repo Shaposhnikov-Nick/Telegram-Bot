@@ -17,7 +17,7 @@ class WeatherForecastRequestEventHandler(
     val log = LoggerFactory.getLogger(this::class.java)
 
     @KafkaListener(
-        topics = ["weather-request-event-topic"],
+        topics = ["#{kafkaProperties.topics.weatherRequest}"],
         containerFactory = "weatherForecastRequestListenerContainerFactory"
     )
     suspend fun handler(weatherRequest: WeatherRequestEvent) {
