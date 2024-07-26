@@ -27,7 +27,7 @@ data class WeatherResponseEvent(
     val snowThreeHours: Double?
 ) : Event {
     override fun getMessageBody(): String {
-        val weatherAsString = """
+        var weatherAsString = """
         ${"Населенный пункт:".bold()} ${name.bold()}
         Описание: $description
         Температура: ${temp.toInt()} C, ощущается как: ${feelLike.toInt()} C
@@ -38,25 +38,25 @@ data class WeatherResponseEvent(
         """.trimIndent()
 
         rainOneHour?.let {
-            weatherAsString.plus("""
+            weatherAsString = weatherAsString.plus("""
                 Дождь 1ч: $it мм
             """.trimIndent())
         }
 
         rainThreeHours?.let {
-            weatherAsString.plus("""
+            weatherAsString = weatherAsString.plus("""
                 Дождь 3ч: $it мм
             """.trimIndent())
         }
 
         snowOneHour?.let {
-            weatherAsString.plus("""
+            weatherAsString = weatherAsString.plus("""
                 Снег 1ч: $it мм
             """.trimIndent())
         }
 
         snowThreeHours?.let {
-            weatherAsString.plus("""
+            weatherAsString = weatherAsString.plus("""
                 Снег 1ч: $it мм
             """.trimIndent())
         }
