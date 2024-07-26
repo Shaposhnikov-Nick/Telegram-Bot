@@ -49,13 +49,17 @@ data class Clouds(
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Rain(
+    @JsonProperty("1h")
     val oneHour: Double?,
+    @JsonProperty("3h")
     val threeHours: Double?
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Snow(
+    @JsonProperty("1h")
     val oneHour: Double?,
+    @JsonProperty("3h")
     val threeHours: Double?
 )
 
