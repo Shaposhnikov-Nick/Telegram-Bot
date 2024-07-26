@@ -38,27 +38,19 @@ data class WeatherResponseEvent(
         """.trimIndent()
 
         rainOneHour?.let {
-            weatherAsString = weatherAsString.plus("""
-                Дождь 1ч: $it мм
-            """.trimIndent())
+            weatherAsString = weatherAsString.plus("\nДождь 1ч: $it мм")
         }
 
         rainThreeHours?.let {
-            weatherAsString = weatherAsString.plus("""
-                Дождь 3ч: $it мм
-            """.trimIndent())
+            weatherAsString = weatherAsString.plus("\nДождь 3ч: $it мм ")
         }
 
         snowOneHour?.let {
-            weatherAsString = weatherAsString.plus("""
-                Снег 1ч: $it мм
-            """.trimIndent())
+            weatherAsString = weatherAsString.plus("\nСнег 1ч: $it мм")
         }
 
         snowThreeHours?.let {
-            weatherAsString = weatherAsString.plus("""
-                Снег 1ч: $it мм
-            """.trimIndent())
+            weatherAsString = weatherAsString.plus("\nСнег 3ч: $it мм")
         }
 
         return weatherAsString
