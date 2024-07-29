@@ -27,32 +27,32 @@ data class WeatherResponseEvent(
     val snowThreeHours: Double?
 ) : Event {
     override fun getMessageBody(): String {
-        var weatherAsString = """
-        ${"Населенный пункт:".bold()} ${name.bold()}
-        Описание: $description
-        Температура: ${temp.toInt()} C, ощущается как: ${feelLike.toInt()} C
-        Видимость: $visibility м
-        Влажность: $humidity %
-        Ветер: $wind м/с, порывы: $windGust м/с
-        Облачность: $clouds %
+        var weatherBody = """
+        ${"Населенный пункт:".bold()} $name.bold()
+        ${"Описание:".bold()} $description
+        ${"Температура:".bold()} ${temp.toInt()} C, ощущается как: ${feelLike.toInt()} C
+        ${"Видимость:".bold()} $visibility м
+        ${"Влажность:".bold()} $humidity %
+        ${"Ветер:".bold()} $wind м/с, порывы: $windGust м/с
+        ${"Облачность:".bold()} $clouds %
         """.trimIndent()
 
         rainOneHour?.let {
-            weatherAsString = weatherAsString.plus("\nДождь 1ч: $it мм")
+            weatherBody = weatherBody.plus("\n${"Дождь 1ч:".bold()} $it мм")
         }
 
         rainThreeHours?.let {
-            weatherAsString = weatherAsString.plus("\nДождь 3ч: $it мм ")
+            weatherBody = weatherBody.plus("\n${"Дождь 3ч:".bold()} $it мм ")
         }
 
         snowOneHour?.let {
-            weatherAsString = weatherAsString.plus("\nСнег 1ч: $it мм")
+            weatherBody = weatherBody.plus("\n${"Снег 1ч:".bold()} $it мм")
         }
 
         snowThreeHours?.let {
-            weatherAsString = weatherAsString.plus("\nСнег 3ч: $it мм")
+            weatherBody = weatherBody.plus("\n${"Снег 3ч:".bold()} $it мм")
         }
 
-        return weatherAsString
+        return weatherBody
     }
 }
