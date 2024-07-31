@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: 31.07.2024_create-table-account
+      author: Shaposhnikov Nikolay
+      changes:
+        - createTable:
+            tableName: account
+            schemaName: telegram
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_account
+              - column:
+                  name: chat_id
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(100)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: about
+                  type: varchar(1000)
+                  constraints:
+                    nullable: true
+
+  - changeSet:
+      id: 31.07.2024_create-index-account_chat_id
+      author: Shaposhnikov Nikolay
+      changes:
+        - createIndex:
+            clustered: false
+            columns:
+              - column:
+                  name: chat_id
+            indexName: account_chat_id
+            schemaName: telegram
+            tableName: account
