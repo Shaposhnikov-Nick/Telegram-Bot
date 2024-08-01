@@ -2,26 +2,27 @@ package tgbot.accountservice.service
 
 import org.springframework.stereotype.Service
 import tgbot.accountservice.extensions.toDto
+import tgbot.accountservice.extensions.toEntity
 import tgbot.accountservice.model.AccountDto
 import tgbot.accountservice.repository.AccountRepository
 
 
 interface AccountService {
     fun getAccount(chatId: String): AccountDto
-    fun saveAccount(account: AccountDto)
+    fun saveAccount(accountDto: AccountDto): AccountDto
 }
 
 
 @Service
 class AccountServiceImpl(
     val accountRepository: AccountRepository
-): AccountService {
+) : AccountService {
     override fun getAccount(chatId: String): AccountDto {
         return accountRepository.findAccountByChatId(chatId).toDto()
     }
 
-    override fun saveAccount(account: AccountDto) {
-        TODO("Not yet implemented")
+    override fun saveAccount(accountDto: AccountDto): AccountDto {
+        return accountRepository.save(accountDto.toEntity()).toDto()
     }
 
 }

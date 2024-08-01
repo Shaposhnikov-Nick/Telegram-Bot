@@ -11,3 +11,13 @@ fun Account.toDto(): AccountDto {
         about
     )
 }
+
+fun AccountDto.toEntity(): Account {
+    return Account(
+        null,
+        chatId,
+        name,
+        email,
+        about
+    )
+}
