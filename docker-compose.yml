@@ -160,8 +160,8 @@ services:
         condition: service_healthy
       config-service:
         condition: service_started
-#    ports:
-#      - ${TELEGRAM_SERVICE_HOST_PORT}:${TELEGRAM_SERVICE_CONTAINER_PORT}
+    ports:
+      - ${TELEGRAM_SERVICE_HOST_PORT}:${TELEGRAM_SERVICE_CONTAINER_PORT}
     networks:
       - tg-bot-network
 
@@ -178,8 +178,6 @@ services:
         condition: service_healthy
       config-service:
         condition: service_started
-#    ports:
-#      - ${TRANSLATE_SERVICE_HOST_PORT}:${TRANSLATE_SERVICE_CONTAINER_PORT}
     networks:
       - tg-bot-network
 
