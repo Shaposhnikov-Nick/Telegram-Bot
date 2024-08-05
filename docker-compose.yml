@@ -197,6 +197,20 @@ services:
     networks:
       - tg-bot-network
 
+  account-service:
+    build: ./account-service/
+    container_name: account-service
+    restart: always
+    environment:
+      - USERNAME=${CONFIG_SERVICE_USERNAME}
+      - PASSWORD=${CONFIG_SERVICE_PASSWORD}
+      - CONFIG_SERVER_PORT=${CONFIG_SERVICE_CONTAINER_PORT}
+    depends_on:
+      config-service:
+        condition: service_started
+    networks:
+      - tg-bot-network
+
 volumes:
   tg-bot-db:
   
