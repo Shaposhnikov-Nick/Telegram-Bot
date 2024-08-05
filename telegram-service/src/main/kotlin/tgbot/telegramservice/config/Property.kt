@@ -10,6 +10,14 @@ class BotProperty {
     var token: String = ""
 }
 
+@Configuration
+@ConfigurationProperties(prefix = "client.account")
+class RestClientProperty {
+    var baseUrl: String = ""
+    var get: String = ""
+    var save: String = ""
+}
+
 
 @Configuration
 @ConfigurationProperties(prefix = "kafka")
