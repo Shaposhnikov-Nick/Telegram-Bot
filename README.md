@@ -3,6 +3,7 @@ Microservice application telegram bot.
 The following functionality has been implemented: 
 - translator ru-en / en-ru   
 - weather forecast
+- account
 
 It is also planned to add other functionality. Architecturally, the functionality is divided into microservices exchanging messages through the Kafka cluster.
 
@@ -26,3 +27,5 @@ Stack:
 - Spring Cloud Config Server
 - Redis
 - Kafka
+- Liquibase
+- Docker
