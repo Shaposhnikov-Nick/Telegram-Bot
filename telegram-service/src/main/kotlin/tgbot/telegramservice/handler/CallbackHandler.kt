@@ -31,5 +31,6 @@ enum class Callback(val value: String) {
     TRANSLATE("translate"),
     RU_EN("ru|en"),
     EN_RU("en|ru"),
-    WEATHER_FORECAST("weather")
+    WEATHER_FORECAST("weather"),
+    ACCOUNT("Аккаунт")
 }
