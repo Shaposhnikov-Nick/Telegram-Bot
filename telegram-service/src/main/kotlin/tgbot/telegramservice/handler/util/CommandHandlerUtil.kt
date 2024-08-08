@@ -3,6 +3,7 @@ package tgbot.telegramservice.handler.util
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import tgbot.telegramservice.entity.User
+import tgbot.telegramservice.handler.AccountCommand
 import tgbot.telegramservice.handler.MainCommand
 import tgbot.telegramservice.handler.ServiceCommand
 import tgbot.telegramservice.handler.TranslateCommand
@@ -63,4 +64,11 @@ class CommandHandlerUtil(
     }
 
     fun getLastTranslateCommand(user: User): TranslateCommand? = user.lastTranslateCommand
+
+    fun getLastAccountCommand(user: User): AccountCommand = user.lastAccountCommand
+
+    fun addLastAccountCommand(user: User, lastComm: AccountCommand) {
+        user.lastAccountCommand = lastComm
+        userService.saveUser(user)
+    }
 }
