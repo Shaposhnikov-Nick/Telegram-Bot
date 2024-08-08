@@ -2,6 +2,7 @@ package tgbot.telegramservice.entity
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
+import tgbot.telegramservice.handler.AccountCommand
 import tgbot.telegramservice.handler.MainCommand
 import tgbot.telegramservice.handler.ServiceCommand
 import tgbot.telegramservice.handler.TranslateCommand
@@ -16,4 +17,5 @@ data class User(
     var lastMainCommand: MainCommand = MainCommand.STOP
     lateinit var lastServiceCommand: ServiceCommand
     lateinit var lastTranslateCommand: TranslateCommand
+    lateinit var lastAccountCommand: AccountCommand
 }
