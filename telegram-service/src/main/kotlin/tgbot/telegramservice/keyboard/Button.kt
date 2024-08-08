@@ -9,3 +9,5 @@ val accountBtn = InlineKeyboardButtonWrapper("Аккаунт", callbackData = Ca
 val otherBtn = InlineKeyboardButtonWrapper("Что-то другое...", callbackData = "other")
 val ruToEnBtn = InlineKeyboardButtonWrapper("RU -> EN", callbackData = Callback.RU_EN.value)
 val enToRuBtn = InlineKeyboardButtonWrapper("EN -> RU", callbackData = Callback.EN_RU.value)
+val getAccountBtn = InlineKeyboardButtonWrapper("Получить", callbackData = Callback.GET_ACCOUNT.value)
+val saveAccountBtn = InlineKeyboardButtonWrapper("Сохранить", callbackData = Callback.SAVE_ACCOUNT.value)
