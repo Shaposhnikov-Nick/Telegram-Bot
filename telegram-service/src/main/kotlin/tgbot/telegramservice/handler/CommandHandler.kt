@@ -29,10 +29,16 @@ enum class MainCommand(val value: String) {
 
 enum class ServiceCommand(val value: String) {
     TRANSLATE("/translate"),
-    WEATHER_FORECAST("/weather_forecast")
+    WEATHER_FORECAST("/weather_forecast"),
+    ACCOUNT("/account")
 }
 
 enum class TranslateCommand(val value: String, val direction: String) {
     RU_EN("/ru-en", "ru|en"),
     EN_RU("/en-ru", "en|ru")
+}
+
+enum class AccountCommand(val value: String) {
+    GET("/get"),
+    SAVE("/save")
 }
