@@ -28,7 +28,7 @@ data class WeatherResponseEvent(
 ) : Event {
     override fun getMessageBody(): String {
         var weatherBody = """
-        ${"Населенный пункт:".bold()} $name.bold()
+        ${"Населенный пункт:".bold()} $name
         ${"Описание:".bold()} $description
         ${"Температура:".bold()} ${temp.toInt()} C, ощущается как: ${feelLike.toInt()} C
         ${"Видимость:".bold()} $visibility м
