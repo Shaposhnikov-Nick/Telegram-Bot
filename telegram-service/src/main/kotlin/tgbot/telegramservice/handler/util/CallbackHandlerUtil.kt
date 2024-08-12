@@ -82,8 +82,8 @@ class CallbackHandlerUtil(
         return if (!commandUtil.isChatStarted(user)) {
             commandUtil.chatNotStartedMsg(user)
         } else {
-            commandUtil.addLastServiceCommand(user, ServiceCommand.ACCOUNT)
-            SendMessage(user.chatId, "Получить или добавить данные о себе")
+            commandUtil.addLastAccountCommand(user, AccountCommand.SAVE)
+            SendMessage(user.chatId, "Введите через запятую имя, email, о себе")
         }
     }
 
