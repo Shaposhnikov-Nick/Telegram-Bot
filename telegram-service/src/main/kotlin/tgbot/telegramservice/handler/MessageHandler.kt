@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update
 import tgbot.telegramservice.entity.User
 import tgbot.telegramservice.handler.util.*
 import tgbot.telegramservice.keyboard.mainMenuKeyboard
+import tgbot.telegramservice.model.AccountDto
 import tgbot.telegramservice.model.AccountRequest
 import tgbot.telegramservice.model.TranslateRequestEvent
 import tgbot.telegramservice.model.WeatherRequestEvent
@@ -34,8 +35,10 @@ class MessageHandler(
             }
 
             ServiceCommand.ACCOUNT -> {
+                val text = update.message.text.split(",")
+                val request = AccountDto(user.chatId, text[0], text[1], text[2])
                 val lastAccountCommand = commandUtil.getLastAccountCommand(user)
-                producers["account"]!! to AccountRequest(user.chatId, lastAccountCommand)
+                producers["account"]!! to AccountRequest(user.chatId, lastAccountCommand, request)
             }
 
             else -> null
