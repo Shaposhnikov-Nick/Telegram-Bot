@@ -33,6 +33,7 @@ class AccountService(
                 val request = AccountDto(event.chatId, event.request!!.name, event.request.email, event.request.about)
                 restClient
                     .post()
+                    .uri("/account")
                     .body(request)
                     .retrieve()
                     .body(AccountDto::class.java)
