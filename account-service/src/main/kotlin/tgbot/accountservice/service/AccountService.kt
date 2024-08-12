@@ -24,7 +24,15 @@ class AccountServiceImpl(
     }
 
     override fun saveAccount(accountDto: AccountDto): AccountDto {
-        return accountRepository.save(accountDto.toEntity()).toDto()
+        var account = accountRepository.findAccountByChatId(accountDto.chatId)
+        if (account != null) {
+            account.name = accountDto.name
+            account.email = accountDto.email
+            account.about = accountDto.about
+        } else {
+            account = accountDto.toEntity()
+        }
+        return accountRepository.save(account).toDto()
     }
 
 }

@@ -13,9 +13,9 @@ class Account(
     @Column(name = "chat_id")
     val chatId: String,
 
-    val name: String,
+    var name: String,
 
-    val email: String?,
+    var email: String?,
 
-    val about: String?
+    var about: String?
 )
