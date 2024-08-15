@@ -29,3 +29,4 @@ Stack:
 - Kafka
 - Liquibase
 - Docker
+- TestContainers
