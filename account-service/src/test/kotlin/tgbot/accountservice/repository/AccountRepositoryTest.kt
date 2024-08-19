@@ -8,13 +8,11 @@ import tgbot.accountservice.BaseTest
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class AccountRepositoryTest: BaseTest() {
+class AccountRepositoryTest : BaseTest() {
 
     @Test
     fun `Save account`() {
-        val saved = accountRepository.save(account)
-
-        assertThat(saved)
+        assertThat(savedAccount)
             .isNotNull()
             .hasFieldOrProperty("id").isNotNull()
             .hasFieldOrPropertyWithValue("chatId", account.chatId)
@@ -25,8 +23,6 @@ class AccountRepositoryTest: BaseTest() {
 
     @Test
     fun `Get account by chatId`() {
-        accountRepository.save(account)
-
         val saved = accountRepository.findAccountByChatId(chatId)
 
         assertThat(saved)
