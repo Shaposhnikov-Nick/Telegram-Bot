@@ -8,6 +8,7 @@ import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.MountableFile
 import tgbot.accountservice.entity.Account
+import tgbot.accountservice.model.AccountDto
 import tgbot.accountservice.repository.AccountRepository
 
 
@@ -16,9 +17,11 @@ abstract class BaseTest {
 
     @Autowired
     lateinit var accountRepository: AccountRepository
-
-    val chatId = "1111"
     lateinit var account: Account
+    lateinit var accountDto: AccountDto
+    var savedAccount: Account? = null
+    val chatId = "1111"
+    val incorrectChatId = "22222"
 
     companion object {
 
@@ -31,6 +34,11 @@ abstract class BaseTest {
     @BeforeEach
     open fun init() {
         account = Account(null, chatId, "Nick", "1@1.com", "About me")
+        accountDto = AccountDto("222", "Tim", "2@2.com", "about")
+
+        savedAccount = accountRepository.findAccountByChatId(chatId)
+        if (savedAccount == null)
+            savedAccount = accountRepository.save(account)
     }
 
 }
