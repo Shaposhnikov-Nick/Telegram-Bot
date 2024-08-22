@@ -132,6 +132,30 @@ services:
     restart: always
     ports:
       - ${REDIS_HOST_PORT}:${REDIS_CONTAINER_PORT}
+
+  grafana:
+    image: grafana/grafana
+    container_name: tg-grafana
+    ports:
+      - ${GRAFANA_HOST_PORT}:${GRAFANA_CONTAINER_PORT}
+    volumes:
+      - ./grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    networks:
+      - tg-bot-network
+
+  prometheus:
+    image: prom/prometheus
+    container_name: tg-prometheus
+    ports:
+      - ${PROMETHEUS_HOST_PORT}:${PROMETHEUS_CONTAINER_PORT}
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus:/prometheus
+    networks:
+      - tg-bot-network
       
   config-service:
     build: ./config-server/
