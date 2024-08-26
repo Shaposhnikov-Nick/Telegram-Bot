@@ -16,6 +16,8 @@ class RestClientProperty {
     var baseUrl: String = ""
     var get: String = ""
     var save: String = ""
+    var login: String = ""
+    var password: String = ""
 }
 
 
